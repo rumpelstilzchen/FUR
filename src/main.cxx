@@ -1,5 +1,6 @@
 #include <iostream>
 #include "libtcod.hpp"
+#include "squareobject.hpp"
 
 using namespace std;
 
