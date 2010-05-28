@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/fur.dir/main.cxx.o CMakeFiles/fur.dir/test.cxx.o  -o fur -rdynamic 
