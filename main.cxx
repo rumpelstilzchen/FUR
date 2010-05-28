@@ -1,4 +1,3 @@
-#include "character.hxx"
 #include <iostream>
 #include "libtcod.hpp"
 
@@ -10,8 +9,8 @@ int main()
     TCODMap*m = new TCODMap (100, 100);
     m->setProperties (1,1, false, true);
 
-    Character *c = new Character();
-    c->incExperience(4);
+    //Character *c = new Character();
+    //c->incExperience(4);
     int x = 5, y = 8;
     TCODLine::init(x,y,13,4);
     do {
