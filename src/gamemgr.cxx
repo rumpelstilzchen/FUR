@@ -23,7 +23,9 @@ GameMgr::private_state::private_state()
    player(SP<Player>(new Player(Position(1,1)))),
    level(SP<Level>(new Level)),
    game_status(RUNNING)
-{}
+{
+  level->addObject(player);
+}
 
 void initializeTCOD()
 {
@@ -43,11 +45,6 @@ void GameMgr::setGameStatus(GAME_STATUS status)
 GameMgr::GameMgr():ps(new private_state)
 {
   initializeTCOD();
-  
-  //initialize FOV MAP
-  for (int i=0;i<50;i++)
-    for (int j=0;j<50;j++)
-      ps->fov_map->setProperties(i,j,true,true);
 }
 
 void GameMgr::enterGameLoop()
@@ -55,10 +52,24 @@ void GameMgr::enterGameLoop()
   // MAIN GAME LOOP
   while (ps->game_status == RUNNING && !TCODConsole::isWindowClosed())
     {
+      //build FOV MAP
+      for (int i=0;i<50;i++)
+	for (int j=0;j<50;j++)
+	  {
+	    SP<SquareObject> sq = ps->level->getPos(Position(i,j));
+	      if(sq)
+	        if(sq->blocksLight())
+		  {
+		    ps->fov_map->setProperties(i,j,false,true);
+		    continue;
+		  }
+	      ps->fov_map->setProperties(i,j,true,true);
+	  }
+
       //compute FOV around player
       ps->fov_map->computeFov(ps->player->getPosition().x,ps->player->getPosition().y);
 
-      //render everything visible on window
+      //render based on FOV
       for (int x=0;x<winSizeX;x++)
 	for (int y=0;y<winSizeY;y++)
 	  if (ps->fov_map->isInFov(x,y))
@@ -83,6 +94,11 @@ void GameMgr::enterGameLoop()
 SP<Player> GameMgr::getPlayer() const
 {
   return ps->player;
+}
+
+SP<Level> GameMgr::getLevel() const
+{
+  return ps->level;
 }
 
 GameMgr::~GameMgr()

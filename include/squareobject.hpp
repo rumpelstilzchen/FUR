@@ -21,6 +21,8 @@ namespace fur
     virtual void onBump(SP<Position>) = 0;
     virtual void onEnter() = 0;
     virtual void onSquareDamaged(SP<Damage>) = 0;
+
+    virtual ~SquareObject(){}
   };
 }
 

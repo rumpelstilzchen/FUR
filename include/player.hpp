@@ -3,10 +3,11 @@
 
 #include <cassert>
 #include "squareobject.hpp"
+#include "direction.hpp"
 
 namespace fur
 {
-  class Player : SquareObject
+  class Player : public SquareObject
   {
   public:
     //inheritance
@@ -15,6 +16,7 @@ namespace fur
     bool blocksLight() const {return false;}
     char getChar() const {return '@';}
     Position getPosition() const {return pos;}
+    bool move(Direction);
 
     void onBump(SP<Position> from) {}
     void onEnter() {assert(false);}

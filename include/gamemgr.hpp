@@ -3,6 +3,7 @@
 
 #include "util.hpp"
 #include "player.hpp"
+#include "level.hpp"
 
 namespace fur
 {
@@ -22,9 +23,11 @@ namespace fur
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};
 
+    SP<Player> getPlayer() const;
+    SP<Level> getLevel() const;
+
     void setGameStatus(GAME_STATUS);
 
-    SP<Player> getPlayer() const;
     void enterGameLoop();
   
     //singleton foo

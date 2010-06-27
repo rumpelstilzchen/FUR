@@ -11,7 +11,9 @@ namespace fur
   public:
     Level();
     ~Level();
+
     SP<SquareObject> getPos(Position);
+    void addObject(SP<SquareObject>);
   private:
     //we completely hide the private state to reduce unneccesary dependencies
     struct private_state;

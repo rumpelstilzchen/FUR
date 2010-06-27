@@ -6,7 +6,7 @@
 
 namespace fur
 {
-  class Wall : SquareObject
+  class Wall : public SquareObject
   {
   public:
     // inheritance
