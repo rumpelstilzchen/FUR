@@ -15,6 +15,8 @@ struct GameMgr::private_state
   SP<Level> level;
   GAME_STATUS game_status;
 
+  int winpos_x, winpos_y;
+
   private_state();
 };
 
@@ -22,7 +24,9 @@ GameMgr::private_state::private_state()
   :fov_map(SP<TCODMap>(new TCODMap (mapSizeX,mapSizeY))),
    player(SP<Player>(new Player(Position(1,1)))),
    level(SP<Level>(new Level)),
-   game_status(RUNNING)
+   game_status(RUNNING),
+   winpos_x(0),
+   winpos_y(0)
 {
   level->addObject(player);
 }
@@ -72,16 +76,22 @@ void GameMgr::enterGameLoop()
       //render based on FOV
       for (int x=0;x<winSizeX;x++)
 	for (int y=0;y<winSizeY;y++)
-	  if (ps->fov_map->isInFov(x,y))
-	    {
-	      SP<SquareObject> sq = ps->level->getPos(Position(x,y));
-	      if(sq)
-		TCODConsole::root->setChar(x,y,sq->getChar());
-	      else
-		TCODConsole::root->setChar(x,y,'.');
+	  {
+	    //x,y   are the positions on the screen
+	    //px,py are the positions on the map
+	    int px = ps->winpos_x+x;
+	    int py = ps->winpos_y+y;
+	    if (ps->fov_map->isInFov(px,py))
+	      {
+		SP<SquareObject> sq = ps->level->getPos(Position(px,py));
+		if(sq)
+		  TCODConsole::root->setChar(x,y,sq->getChar());
+		else
+		  TCODConsole::root->setChar(x,y,'.');
 	    }
-	  else
-	    TCODConsole::root->setChar(x,y,' '); //nothing to see here
+	    else
+	      TCODConsole::root->setChar(x,y,' '); //invisible field (out of FOV)
+	  }
 
       //draw everything
       TCODConsole::root->flush();
