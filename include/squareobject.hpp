@@ -24,6 +24,18 @@ namespace fur
 
     virtual ~SquareObject(){}
   };
+
+  struct pred_blocks_light {
+    bool operator()(SP<SquareObject> s) {
+      return s->blocksLight();
+    }
+  };
+
+  struct pred_is_passable {
+    bool operator()(SP<SquareObject> s) {
+      return s->isPassable();
+    }
+  };
 }
 
 #endif //__SQUARE_OBJECT_HPP

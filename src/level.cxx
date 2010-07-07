@@ -1,3 +1,5 @@
+#include <string>
+#include <fstream>
 #include <list>
 #include <cassert>
 #include "level.hpp"
@@ -36,34 +38,19 @@ std::list<SP<SquareObject> > Level::getPos(Position p)
       result.push_back(*it);
   return result;
 }
-
 /*
-#include <fstream>
-#include <iostream>
-#include <string>
-using namespace std;
-int main()
 {
   ifstream in ( "somefile" );
   if ( in.is_open() ) {
     string line;
     while ( getline ( in, line ) ) {
-  15.
-    string::size_type i = line.find_first_not_of ( " \t\n\v" );
-  16.
+      string::size_type i = line.find_first_not_of ( " \t\n\v" );
        
-  17.
-    if ( i != string::npos && line[i] == '#' )
-  18.
-    continue;
-  19.
+      if ( i != string::npos && line[i] == '#' )
+	continue;
        
-  20.
-    // Process non-comment line
-  21.
+      // Process non-comment line
     }
-  22.
-    }
-  23.
-    }
+  }
+}
 */

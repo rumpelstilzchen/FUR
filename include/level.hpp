@@ -13,6 +13,8 @@ namespace fur
     Level();
     ~Level();
 
+    
+
     std::list<SP<SquareObject> > getPos(Position);
     void addObject(SP<SquareObject>);
   private:

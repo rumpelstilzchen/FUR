@@ -5,4 +5,15 @@
 
 #define SP boost::shared_ptr
 
+namespace fur
+{
+  struct pred_not
+  {
+    bool operator()(bool b)
+    {
+      return !b;
+    }
+  };
+}
+
 #endif //UTIL_HPP

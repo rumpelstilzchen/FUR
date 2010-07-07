@@ -1,4 +1,5 @@
 #include <list>
+#include <algorithm>
 #include "constants.hpp"
 #include "gamemgr.hpp"
 #include "libtcod.hpp"
@@ -61,16 +62,14 @@ void GameMgr::enterGameLoop()
       for (int i=0;i<50;i++)
 	for (int j=0;j<50;j++)
 	  {
-	    SP<SquareObject> sq = ps->level->getPos(Position(i,j)).front(); //TODO
-	      if(sq)
-	        if(sq->blocksLight())
-		  {
-		    ps->fov_map->setProperties(i,j,false,true);
-		    continue;
-		  }
+	    std::list<SP<SquareObject> > sql = ps->level->getPos(Position(i,j));
+	    int light_blockers = std::count_if(sql.begin(),sql.end(),pred_blocks_light());
+	    if(light_blockers>0)
+	      ps->fov_map->setProperties(i,j,false,true);
+	    else
 	      ps->fov_map->setProperties(i,j,true,true);
 	  }
-
+    
       //compute FOV around player
       ps->fov_map->computeFov(ps->player->getPosition().x,ps->player->getPosition().y);
 
