@@ -59,7 +59,7 @@ void GameMgr::enterGameLoop()
     {
       //build FOV MAP
       for (int i=0;i<playAreaX;i++)
-	for (int j=0;j<playAreaX;j++)
+	for (int j=0;j<playAreaY;j++)
 	  {
 	    SP<SquareObject> sq = ps->level->getPos(Position(i,j)).front(); //TODO
 	      if(sq)
@@ -98,6 +98,7 @@ void GameMgr::enterGameLoop()
 	  }
 
       //draw everything
+      msg("Draw funktioniert");
       TCODConsole::root->flush();
 
       //process user input
@@ -121,6 +122,16 @@ GameMgr::~GameMgr()
 }
 
 void GameMgr::msg(std::string msg) {
+
+  currentString=msg;
+
+  char*cstr=new char[currentString.size()+1];
+
+  strcpy (cstr, currentString.c_str());
+
+  TCODConsole::root->printLeft(msgAreaX, msgAreaY, TCOD_BKGND_NONE, "test");
+
+  delete[]cstr;
   //add msg to console
 }
 

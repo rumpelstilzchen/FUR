@@ -10,7 +10,7 @@ namespace fur
 {
   class GameMgr
   {
-  private: 
+  private:
     //singleton foo
     GameMgr();
     ~GameMgr();
@@ -21,6 +21,8 @@ namespace fur
     struct private_state;
     private_state* ps;
 
+    std::string currentString;
+
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};
 
@@ -30,7 +32,7 @@ namespace fur
     void setGameStatus(GAME_STATUS);
 
     void enterGameLoop();
-  
+
     void msg(std::string msg);
 
     //singleton foo
