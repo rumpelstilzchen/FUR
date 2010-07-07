@@ -1,7 +1,8 @@
 #ifndef __LEVEL_HPP
 #define __LEVEL_HPP
 
-#include <util.hpp>
+#include <list>
+#include "util.hpp"
 #include "squareobject.hpp"
 
 namespace fur
@@ -12,7 +13,7 @@ namespace fur
     Level();
     ~Level();
 
-    SP<SquareObject> getPos(Position);
+    std::list<SP<SquareObject> > getPos(Position);
     void addObject(SP<SquareObject>);
   private:
     //we completely hide the private state to reduce unneccesary dependencies

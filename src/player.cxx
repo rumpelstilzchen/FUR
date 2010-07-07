@@ -14,7 +14,7 @@ void Player::onSquareDamaged(SP<Damage> dmg)
 bool Player::move(Direction d)
 {
   Position newPos = d.toPos(pos);
-  SP<SquareObject> sq = GameMgr::getInstance().getLevel()->getPos(newPos);
-  if(!sq)
+  std::list<SP<SquareObject> > sql = GameMgr::getInstance().getLevel()->getPos(newPos);
+  if(sql.size()==0)
     pos = newPos;
 }

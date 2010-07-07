@@ -26,12 +26,44 @@ void Level::addObject(SP<SquareObject> o)
   ps->rep.push_back(o);
 }
 
-SP<SquareObject> Level::getPos(Position p)
+std::list<SP<SquareObject> > Level::getPos(Position p)
 {
+  std::list<SP<SquareObject> > result;
   for(std::list<SP<SquareObject> >::const_iterator it = ps->rep.begin();
       it != ps->rep.end();
       it++)
     if((*it)->getPosition() == p)
-      return *it;
-  return SP<SquareObject>();
+      result.push_back(*it);
+  return result;
 }
+
+/*
+#include <fstream>
+#include <iostream>
+#include <string>
+using namespace std;
+int main()
+{
+  ifstream in ( "somefile" );
+  if ( in.is_open() ) {
+    string line;
+    while ( getline ( in, line ) ) {
+  15.
+    string::size_type i = line.find_first_not_of ( " \t\n\v" );
+  16.
+       
+  17.
+    if ( i != string::npos && line[i] == '#' )
+  18.
+    continue;
+  19.
+       
+  20.
+    // Process non-comment line
+  21.
+    }
+  22.
+    }
+  23.
+    }
+*/

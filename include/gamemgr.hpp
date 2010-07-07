@@ -31,7 +31,7 @@ namespace fur
 
     void enterGameLoop();
   
-    void msg(std:.string msg);
+    void msg(std::string msg);
 
     //singleton foo
     static GameMgr &getInstance();

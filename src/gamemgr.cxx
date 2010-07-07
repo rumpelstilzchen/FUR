@@ -1,3 +1,4 @@
+#include <list>
 #include "constants.hpp"
 #include "gamemgr.hpp"
 #include "libtcod.hpp"
@@ -60,7 +61,7 @@ void GameMgr::enterGameLoop()
       for (int i=0;i<50;i++)
 	for (int j=0;j<50;j++)
 	  {
-	    SP<SquareObject> sq = ps->level->getPos(Position(i,j));
+	    SP<SquareObject> sq = ps->level->getPos(Position(i,j)).front(); //TODO
 	      if(sq)
 	        if(sq->blocksLight())
 		  {
@@ -83,9 +84,12 @@ void GameMgr::enterGameLoop()
 	    int py = ps->winpos_y+y;
 	    if (ps->fov_map->isInFov(px,py))
 	      {
-		SP<SquareObject> sq = ps->level->getPos(Position(px,py));
-		if(sq)
-		  TCODConsole::root->setChar(x,y,sq->getChar());
+		std::list<SP<SquareObject> > sql = ps->level->getPos(Position(px,py));
+		if(sql.size()>0)
+		  {
+		    SP<SquareObject> sq = sql.front();
+		    TCODConsole::root->setChar(x,y,sq->getChar());
+		}
 		else
 		  TCODConsole::root->setChar(x,y,'.');
 	    }
