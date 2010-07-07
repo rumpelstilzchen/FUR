@@ -23,12 +23,12 @@ struct GameMgr::private_state
 };
 
 GameMgr::private_state::private_state()
-  :fov_map(SP<TCODMap>(new TCODMap (mapSizeX,mapSizeY))),
-   player(SP<Player>(new Player(Position(1,1)))),
-   level(SP<Level>(new Level)),
-   game_status(RUNNING),
-   winpos_x(0),
-   winpos_y(0)
+    :fov_map(SP<TCODMap>(new TCODMap (mapSizeX,mapSizeY))),
+    player(SP<Player>(new Player(Position(1,1)))),
+    level(SP<Level>(new Level)),
+    game_status(RUNNING),
+    winpos_x(0),
+    winpos_y(0)
 {
   level->addObject(player);
 }
@@ -57,52 +57,52 @@ void GameMgr::enterGameLoop()
 {
   // MAIN GAME LOOP
   while (ps->game_status == RUNNING && !TCODConsole::isWindowClosed())
-    {
-      //build FOV MAP
-      for (int i=0;i<playAreaX;i++)
-	for (int j=0;j<playAreaY;j++)
-	  {
-	    std::list<SP<SquareObject> > sql = ps->level->getPos(Position(i,j));
-	    int light_blockers = std::count_if(sql.begin(),sql.end(),pred_blocks_light());
-	    if(light_blockers>0)
-	      ps->fov_map->setProperties(i,j,false,true);
-	    else
-	      ps->fov_map->setProperties(i,j,true,true);
-	  }
-    
-      //compute FOV around player
-      ps->fov_map->computeFov(ps->player->getPosition().x,ps->player->getPosition().y);
+  {
+    //build FOV MAP
+    for (int i=0;i<playAreaX;i++)
+      for (int j=0;j<playAreaY;j++)
+      {
+        std::list<SP<SquareObject> > sql = ps->level->getPos(Position(i,j));
+        int light_blockers = std::count_if(sql.begin(),sql.end(),pred_blocks_light());
+        if (light_blockers>0)
+          ps->fov_map->setProperties(i,j,false,true);
+        else
+          ps->fov_map->setProperties(i,j,true,true);
+      }
 
-      //render based on FOV
-      for (int x=0;x<winSizeX;x++)
-	for (int y=0;y<winSizeY;y++)
-	  {
-	    //x,y   are the positions on the screen
-	    //px,py are the positions on the map
-	    int px = ps->winpos_x+x;
-	    int py = ps->winpos_y+y;
-	    if (ps->fov_map->isInFov(px,py))
-	      {
-		std::list<SP<SquareObject> > sql = ps->level->getPos(Position(px,py));
-		if(sql.size()>0)
-		  {
-		    SP<SquareObject> sq = sql.front();
-		    TCODConsole::root->setChar(x,y,sq->getChar());
-		}
-		else
-		  TCODConsole::root->setChar(x,y,'.');
-	    }
-	    else
-	      TCODConsole::root->setChar(x,y,' '); //invisible field (out of FOV)
-	  }
+    //compute FOV around player
+    ps->fov_map->computeFov(ps->player->getPosition().x,ps->player->getPosition().y);
 
-      //draw everything
-      msg("Draw funktioniert");
-      TCODConsole::root->flush();
+    //render based on FOV
+    for (int x=0;x<winSizeX;x++)
+      for (int y=0;y<winSizeY;y++)
+      {
+        //x,y   are the positions on the screen
+        //px,py are the positions on the map
+        int px = ps->winpos_x+x;
+        int py = ps->winpos_y+y;
+        if (ps->fov_map->isInFov(px,py))
+        {
+          std::list<SP<SquareObject> > sql = ps->level->getPos(Position(px,py));
+          if (sql.size()>0)
+          {
+            SP<SquareObject> sq = sql.front();
+            TCODConsole::root->setChar(x,y,sq->getChar());
+          }
+          else
+            TCODConsole::root->setChar(x,y,'.');
+        }
+        else
+          TCODConsole::root->setChar(x,y,' '); //invisible field (out of FOV)
+      }
 
-      //process user input
-      InputMgr::getInstance().waitForInput();
-    }
+    //draw everything
+    msg("Draw funktioniert");
+    TCODConsole::root->flush();
+
+    //process user input
+    InputMgr::getInstance().waitForInput();
+  }
 }
 
 SP<Player> GameMgr::getPlayer() const
@@ -121,15 +121,10 @@ GameMgr::~GameMgr()
 }
 
 void GameMgr::msg(std::string msg) {
-
   currentString=msg;
-
   char*cstr=new char[currentString.size()+1];
-
   strcpy (cstr, currentString.c_str());
-
-  TCODConsole::root->printLeft(msgAreaX, msgAreaY, TCOD_BKGND_NONE, "test");
-
+  TCODConsole::root->printLeft(msgAreaX, msgAreaY, TCOD_BKGND_NONE, "%s",cstr);
   delete[]cstr;
   //add msg to console
 }
