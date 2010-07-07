@@ -5,6 +5,7 @@
 #include "util.hpp"
 #include "player.hpp"
 #include "level.hpp"
+#include <list>
 
 namespace fur
 {
@@ -21,7 +22,7 @@ namespace fur
     struct private_state;
     private_state* ps;
 
-    std::string currentString;
+    std::list<std::string > currentStrings; //currentStrings
 
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};
@@ -33,7 +34,11 @@ namespace fur
 
     void enterGameLoop();
 
-    void msg(std::string msg);
+    void msg(std::string msg);                          //prints to standard rectangle
+    void msg(std::string msg,int x,int y,int w,int h);  //prints to rectangle
+    void msgLine(std::string msg);                      //prints to standard Area.
+
+
 
     //singleton foo
     static GameMgr &getInstance();

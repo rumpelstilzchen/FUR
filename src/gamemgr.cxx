@@ -97,7 +97,8 @@ void GameMgr::enterGameLoop()
       }
 
     //draw everything
-    msg("Draw funktioniert");
+    msgLine("Draw funktioniert1");
+    msgLine("Draw funktioniert2");
     TCODConsole::root->flush();
 
     //process user input
@@ -120,13 +121,38 @@ GameMgr::~GameMgr()
   delete ps;
 }
 
+/*
+ * Prints specified string in box
+ */
+
 void GameMgr::msg(std::string msg) {
-  currentString=msg;
-  char*cstr=new char[currentString.size()+1];
-  strcpy (cstr, currentString.c_str());
-  TCODConsole::root->printLeft(msgAreaX, msgAreaY, TCOD_BKGND_NONE, "%s",cstr);
+  //currentString=msg;
+  char*cstr=new char[msg.size()+1];
+  strcpy (cstr, msg.c_str());
+  TCODConsole::root->printLeftRect(msgAreaX, msgAreaY, msgAreaW, msgAreaW, TCOD_BKGND_NONE, "%s",cstr);
   delete[]cstr;
   //add msg to console
+}
+
+void GameMgr::msg(std::string msg,int x,int y,int w,int h) {
+  //currentString=msg;
+  char*cstr=new char[msg.size()+1];
+  strcpy (cstr, msg.c_str());
+  TCODConsole::root->printLeftRect(x,y,w,h, TCOD_BKGND_NONE, "%s",cstr);
+  delete[]cstr;
+}
+
+void GameMgr::msgLine(std::string msg){
+    while (currentStrings.size()>4) currentStrings.pop_back();
+    currentStrings.push_front(msg);
+    std::list<std::string>::iterator it;
+    it = currentStrings.begin();
+    int i=0;
+    while (it!=currentStrings.end()){
+       TCODConsole::root->printLeft(msgAreaX,msgAreaY+i,TCOD_BKGND_NONE,"%s",it->c_str());
+       ++it;
+       ++i;
+    }
 }
 
 GameMgr& GameMgr::getInstance()
