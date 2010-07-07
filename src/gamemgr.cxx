@@ -58,8 +58,8 @@ void GameMgr::enterGameLoop()
   while (ps->game_status == RUNNING && !TCODConsole::isWindowClosed())
     {
       //build FOV MAP
-      for (int i=0;i<50;i++)
-	for (int j=0;j<50;j++)
+      for (int i=0;i<playAreaX;i++)
+	for (int j=0;j<playAreaX;j++)
 	  {
 	    SP<SquareObject> sq = ps->level->getPos(Position(i,j)).front(); //TODO
 	      if(sq)
