@@ -6,7 +6,7 @@ using namespace fur;
 
 int main()
 {
-  fur::GameMgr& gmgr = fur::GameMgr::getInstance();
+  GameMgr& gmgr = GameMgr::getInstance();
   
   SP<Wall> w1 = SP<Wall>(new Wall(Position(5,5)));
   SP<Wall> w2 = SP<Wall>(new Wall(Position(5,6)));

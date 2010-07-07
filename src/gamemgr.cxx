@@ -116,6 +116,10 @@ GameMgr::~GameMgr()
   delete ps;
 }
 
+void GameMgr::msg(std::string msg) {
+  //add msg to console
+}
+
 GameMgr& GameMgr::getInstance()
 {
   static GameMgr instance;

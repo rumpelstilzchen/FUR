@@ -1,6 +1,7 @@
 #ifndef __GAME_MGR_HPP
 #define __GAME_MGR_HPP
 
+#include <string>
 #include "util.hpp"
 #include "player.hpp"
 #include "level.hpp"
@@ -30,6 +31,8 @@ namespace fur
 
     void enterGameLoop();
   
+    void msg(std:.string msg);
+
     //singleton foo
     static GameMgr &getInstance();
   };
