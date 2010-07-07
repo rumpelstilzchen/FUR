@@ -59,8 +59,8 @@ void GameMgr::enterGameLoop()
   while (ps->game_status == RUNNING && !TCODConsole::isWindowClosed())
     {
       //build FOV MAP
-      for (int i=0;i<50;i++)
-	for (int j=0;j<50;j++)
+      for (int i=0;i<playAreaX;i++)
+	for (int j=0;j<playAreaY;j++)
 	  {
 	    std::list<SP<SquareObject> > sql = ps->level->getPos(Position(i,j));
 	    int light_blockers = std::count_if(sql.begin(),sql.end(),pred_blocks_light());
@@ -97,6 +97,7 @@ void GameMgr::enterGameLoop()
 	  }
 
       //draw everything
+      msg("Draw funktioniert");
       TCODConsole::root->flush();
 
       //process user input
@@ -120,6 +121,16 @@ GameMgr::~GameMgr()
 }
 
 void GameMgr::msg(std::string msg) {
+
+  currentString=msg;
+
+  char*cstr=new char[currentString.size()+1];
+
+  strcpy (cstr, currentString.c_str());
+
+  TCODConsole::root->printLeft(msgAreaX, msgAreaY, TCOD_BKGND_NONE, "test");
+
+  delete[]cstr;
   //add msg to console
 }
 
