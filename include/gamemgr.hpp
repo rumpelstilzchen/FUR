@@ -23,6 +23,7 @@ namespace fur
     private_state* ps;
 
     std::list<std::string > currentStrings; //currentStrings
+    int cnt; //delete this
 
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};

@@ -30,6 +30,8 @@ namespace fur
   private:
     Position pos;
     int hitpoints;
+
+
   };
 }
 

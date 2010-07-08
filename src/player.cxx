@@ -20,7 +20,7 @@ bool Player::move(Direction d)
   using boost::bind;
   Position newPos = d.toPos(pos);
   std::list<SP<SquareObject> > sql = GameMgr::getInstance().getLevel()->getPos(newPos);
-  
+
   int not_passible = std::count_if(sql.begin(),
 				   sql.end(),
 				   bind<bool>(pred_not(),

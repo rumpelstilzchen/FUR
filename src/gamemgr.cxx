@@ -7,6 +7,7 @@
 #include "player.hpp"
 #include "level.hpp"
 #include "inputmgr.hpp"
+#include <iostream>
 
 using namespace fur;
 
@@ -50,6 +51,7 @@ void GameMgr::setGameStatus(GAME_STATUS status)
 
 GameMgr::GameMgr():ps(new private_state)
 {
+  cnt=0; //delete this
   initializeTCOD();
 }
 
@@ -97,8 +99,18 @@ void GameMgr::enterGameLoop()
       }
 
     //draw everything
-    msgLine("Draw funktioniert1");
-    msgLine("Draw funktioniert2");
+    if(cnt==0)msgLine("null");
+    if(cnt==1)msgLine("first");
+    if(cnt==2)msgLine("second");
+    if(cnt==3){
+        msgLine("third");
+        cnt= -1;
+    }
+    cnt++;
+
+
+
+    //msgLine("0");
     TCODConsole::root->flush();
 
     //process user input
@@ -129,7 +141,7 @@ void GameMgr::msg(std::string msg) {
   //currentString=msg;
   char*cstr=new char[msg.size()+1];
   strcpy (cstr, msg.c_str());
-  TCODConsole::root->printLeftRect(msgAreaX, msgAreaY, msgAreaW, msgAreaW, TCOD_BKGND_NONE, "%s",cstr);
+  TCODConsole::root->printLeftRect(msgAreaX, msgAreaY, msgAreaW, msgAreaH, TCOD_BKGND_NONE, "%s",cstr);
   delete[]cstr;
   //add msg to console
 }
@@ -142,7 +154,35 @@ void GameMgr::msg(std::string msg,int x,int y,int w,int h) {
   delete[]cstr;
 }
 
+//TODO add linebreaks
+//need to think a little bit how it should be done
 void GameMgr::msgLine(std::string msg){
+    //TCODConsole::root->printFrame(msgAreaX, msgAreaY, msgAreaW, msgAreaH,false, TCOD_BKGND_NONE,"test");
+
+    TCODConsole::root->rect(msgAreaX,msgAreaY,msgAreaW,msgAreaH,true,TCOD_BKGND_NONE);
+
+    int j=0;
+    do {
+        //std::cout << currentStrings.size();
+        //if (!currentStrings.empty()) std::cout << "front: " << currentStrings.front();
+        if (currentStrings.size()>4) currentStrings.pop_back();
+        //std::cout << currentStrings.size() << std::endl;
+        currentStrings.push_front(msg.substr(j,msgAreaW));
+        j+=msgAreaW;
+    } while (j<msg.size());
+
+    //printing it:
+    std::list<std::string>::iterator it;
+    it = currentStrings.begin();
+    int i=0;
+    while (it!=currentStrings.end()){
+       TCODConsole::root->printLeftRect(msgAreaX,msgAreaY+i,msgAreaW,1,TCOD_BKGND_NONE,"%s",it->c_str());
+       ++it;
+       ++i;
+    }
+
+
+/*
     while (currentStrings.size()>4) currentStrings.pop_back();
     currentStrings.push_front(msg);
     std::list<std::string>::iterator it;
@@ -153,6 +193,7 @@ void GameMgr::msgLine(std::string msg){
        ++it;
        ++i;
     }
+*/
 }
 
 GameMgr& GameMgr::getInstance()
