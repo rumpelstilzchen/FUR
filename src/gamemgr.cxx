@@ -176,24 +176,12 @@ void GameMgr::msgLine(std::string msg){
     it = currentStrings.begin();
     int i=0;
     while (it!=currentStrings.end()){
+       if (i==0) TCODConsole::root->setForegroundColor(TCODColor::red);
+       else TCODConsole::root->setForegroundColor(TCODColor::white);
        TCODConsole::root->printLeftRect(msgAreaX,msgAreaY+i,msgAreaW,1,TCOD_BKGND_NONE,"%s",it->c_str());
        ++it;
        ++i;
     }
-
-
-/*
-    while (currentStrings.size()>4) currentStrings.pop_back();
-    currentStrings.push_front(msg);
-    std::list<std::string>::iterator it;
-    it = currentStrings.begin();
-    int i=0;
-    while (it!=currentStrings.end()){
-       TCODConsole::root->printLeft(msgAreaX,msgAreaY+i,TCOD_BKGND_NONE,"%s",it->c_str());
-       ++it;
-       ++i;
-    }
-*/
 }
 
 GameMgr& GameMgr::getInstance()
