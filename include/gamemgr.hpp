@@ -6,6 +6,9 @@
 #include "player.hpp"
 #include "level.hpp"
 #include <list>
+#include "message.hpp"
+#include "libtcod.hpp"
+#include "libtcod_int.h"
 
 namespace fur
 {
@@ -22,7 +25,7 @@ namespace fur
     struct private_state;
     private_state* ps;
 
-    std::list<std::string > currentStrings; //currentStrings
+    std::list<Message > currentStrings; //currentStrings
     int cnt; //delete this
 
   public:
@@ -35,11 +38,8 @@ namespace fur
 
     void enterGameLoop();
 
-    void msg(std::string msg);                          //prints to standard rectangle
-    void msg(std::string msg,int x,int y,int w,int h);  //prints to rectangle
-    void msgLine(std::string msg);                      //prints to standard Area.
-
-
+    void msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor colour);                      //prints to standard Area.
+    void msg(std::string msg); //writes with current background colour
 
     //singleton foo
     static GameMgr &getInstance();

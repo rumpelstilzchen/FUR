@@ -7,7 +7,8 @@ namespace fur
   {
   public:
     int hp_damage;
-    enum {HP_ONLY} type;
+    enum {HP_ONLY,MOTIVATION_ONLY} type;
+
   };
 }
 

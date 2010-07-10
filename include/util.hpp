@@ -14,6 +14,7 @@ namespace fur
       return !b;
     }
   };
+
 }
 
 #endif //UTIL_HPP
