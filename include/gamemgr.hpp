@@ -9,6 +9,7 @@
 #include "message.hpp"
 #include "libtcod.hpp"
 #include "libtcod_int.h"
+#include "messagewindow.hpp"
 
 namespace fur
 {
@@ -26,6 +27,8 @@ namespace fur
     private_state* ps;
 
     std::list<Message > currentStrings; //currentStrings
+    MessageWindow * messagewindow;
+
     int cnt; //delete this
 
   public:

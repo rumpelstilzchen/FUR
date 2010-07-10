@@ -11,6 +11,8 @@ Message::Message()
 Message::Message(std::string x)
 {
   msg=x;
+  flag=TCOD_BKGND_NONE;
+  colour=TCODColor::white;
 }
 
 Message::Message(std::string s,TCOD_bkgnd_flag_t f,TCODColor c)

@@ -8,8 +8,7 @@
 #include "level.hpp"
 #include "inputmgr.hpp"
 #include "message.hpp"
-#include <iostream> //testoutputs, can probably remove this
-
+#include "messagewindow.hpp"
 
 using namespace fur;
 
@@ -44,6 +43,7 @@ void initializeTCOD()
   TCODConsole::root->setBackgroundColor(TCODColor::black);
   TCODMouse::showCursor(false);
   TCODConsole::root->clear();
+
 }
 
 void GameMgr::setGameStatus(GAME_STATUS status)
@@ -55,6 +55,10 @@ GameMgr::GameMgr():ps(new private_state)
 {
   cnt=0; //delete this
   initializeTCOD();
+
+  //initialize MessageWindow
+  messagewindow = new MessageWindow();
+
 }
 
 void GameMgr::enterGameLoop()
@@ -110,8 +114,8 @@ void GameMgr::enterGameLoop()
     }
     msg("this is messaged every round");
     cnt++;
-
-
+    Message m("test");
+    messagewindow->add(m);
     TCODConsole::root->flush();
 
     //process user input
