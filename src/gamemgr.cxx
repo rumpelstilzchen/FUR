@@ -105,7 +105,12 @@ void GameMgr::enterGameLoop()
       }
 
     //tests of the msg method, leave it here for now
-    if(cnt==0)msg("null",TCOD_BKGND_NONE,TCODColor::white);
+    Message m;
+    if(cnt==0){
+        m=Message("null",TCOD_BKGND_NONE,TCODColor::white);
+        messagewindow->add(m);
+        msg(m);
+    }
     if(cnt==1)msg("first line is also a very long line, should test in a better way if it handle more long lines",TCOD_BKGND_NONE,TCODColor::red);
     if(cnt==2)msg("second",TCOD_BKGND_NONE,TCODColor::blue);
     if(cnt==3){
@@ -114,8 +119,9 @@ void GameMgr::enterGameLoop()
     }
     msg("this is messaged every round");
     cnt++;
-    Message m("test");
-    messagewindow->add(m);
+
+
+
     TCODConsole::root->flush();
 
     //process user input
@@ -142,7 +148,6 @@ void GameMgr::msg(std::string m){
    msg(m,TCOD_BKGND_NONE,TCODColor::white); //maybe change this
 }
 
-
 //maybe add a start set colour to the starting colour thingy
 void GameMgr::msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor colour){
     TCODConsole::root->rect(msgAreaX,msgAreaY,msgAreaW,msgAreaH, true, TCOD_BKGND_SET); //clears the message area
@@ -159,6 +164,22 @@ void GameMgr::msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor colour)
        ++it;
     }
 }
+
+void GameMgr::msg(Message m){
+    TCODConsole::root->rect(msgAreaX,msgAreaY,msgAreaW,msgAreaH, true, TCOD_BKGND_SET); //clears the message area
+    if (currentStrings.size()>msgAreaH) currentStrings.pop_back();
+    currentStrings.push_front(m);
+    int h=msgAreaH,th;
+    std::list<Message>::iterator it; it = currentStrings.begin();
+    while (h>0&&it!=currentStrings.end()){
+       th=TCODConsole::root->getHeightLeftRect(msgAreaX,msgAreaY,msgAreaW,h,"%s",it->c_str());
+       TCODConsole::root->setForegroundColor(it->getColour());
+       TCODConsole::root->printLeftRect(msgAreaX,msgAreaY+msgAreaH-h,msgAreaW,h,it->getFlag(),"%s",it->c_str());
+       h=h-th;
+       ++it;
+    }
+}
+
 
 
 GameMgr& GameMgr::getInstance()

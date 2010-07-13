@@ -43,6 +43,7 @@ namespace fur
 
     void msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor colour);                      //prints to standard Area.
     void msg(std::string msg); //writes with current background colour
+    void msg(Message m);
 
     //singleton foo
     static GameMgr &getInstance();
