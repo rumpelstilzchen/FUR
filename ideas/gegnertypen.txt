@@ -1,0 +1,27 @@
+Gegnetypen:
+
+-> Normalen Gegner
+ Mathe
+ -> Polynom [n-ten grades] FK ANG
+ -> Komplexe Zahl NK-einfach ANG
+ -> Kontraposition [Zwei Gegner negieren/Plätzetauschen]
+ -> Wiederspruch [Blitz auf Gegner] ANG
+ -> Induktion [Zählfeld] [Geg. FK] ANG
+ ALP [Haskell]
+ -> Lambda Ausdruck [Schlangenartig, Zielsuchend] ANG
+ -> Rekursion [einfach-NK, aber vervielfältigt sich]
+ -> Invariante [NK/langsam/Unbesiegbar bis auf Widerspruch]
+ Technik [2 Leben/Oups, Nachklausur ist ja die gleiche]
+ -> NAND Level, durchkommen.
+
+-> Prof
+ -> Kriegel | Spezialattacken:  -> Hinternspanner [Lähmung x Runden durch irritation]
+
+ -> Esponda | Spezialattacken:  -> Klammerwirrwar [FK Attacke Klammernschießen im Bogen]
+				-> Laptopverbot [Schwarzer Bildschirm]
+
+ -> Liers   | Spezialattacken:  -> Vernichtender Witz [Konz. -> 0]
+				-> Ablenkung: Erzählt wie das Wetter ist.
+
+-> Endgegner/Tutorin
+ -> Ute | Würfelt, wenn du dran bist, hast du verloren... [Selber Zahl aussuchen]

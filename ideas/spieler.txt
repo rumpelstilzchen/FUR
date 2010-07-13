@@ -1,0 +1,17 @@
+Spieler:
+
+Attribute:
+ -> Leben <muss geheilt werden (Cafete etwa..)
+ -> Konzentration <regeneriert von selbst>
+
+ -> Erfahrungspunkte ---> Level/Semester
+
+Aktionen:
+ Benutzen/Aktivieren:
+ Bewegen (LROB,Schraeg..)
+ Aufnehmen
+ Lesen
+ Essen
+ (Gegenstand anlegen)
+ NK-Angriff
+ Spezialattacke <+Namen eingeben>
