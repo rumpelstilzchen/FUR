@@ -4,6 +4,7 @@
 #include <cassert>
 #include "squareobject.hpp"
 #include "direction.hpp"
+#include "level.hpp"
 
 namespace fur
 {
@@ -27,6 +28,7 @@ namespace fur
     {}
 
     friend class InputMgr;
+    friend class Level;
   private:
     Position pos;
     int hitpoints;

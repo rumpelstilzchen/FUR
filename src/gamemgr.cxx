@@ -105,6 +105,7 @@ void GameMgr::enterGameLoop()
       }
 
     //tests of the msg method, leave it here for now
+    /*
     Message m;
     if(cnt==0){
         m=Message("null",TCOD_BKGND_NONE,TCODColor::white);
@@ -119,7 +120,7 @@ void GameMgr::enterGameLoop()
     }
     msg("this is messaged every round");
     cnt++;
-
+    */
 
 
     TCODConsole::root->flush();

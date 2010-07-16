@@ -17,6 +17,7 @@ namespace fur
 
     std::list<SP<SquareObject> > getPos(Position);
     void addObject(SP<SquareObject>);
+    void fromFile(std::string);
   private:
     //we completely hide the private state to reduce unneccesary dependencies
     struct private_state;

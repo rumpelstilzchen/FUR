@@ -2,10 +2,10 @@
 #define __GAME_MGR_HPP
 
 #include <string>
+#include <list>
 #include "util.hpp"
 #include "player.hpp"
 #include "level.hpp"
-#include <list>
 #include "message.hpp"
 #include "libtcod.hpp"
 #include "libtcod_int.h"
