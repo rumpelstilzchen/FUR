@@ -5,10 +5,12 @@
 #include <vector>
 #include <cassert>
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include "level.hpp"
 #include "gamemgr.hpp"
 #include "player.hpp"
 #include "wall.hpp"
+#include "objfact.hpp"
 
 using namespace fur;
 
@@ -39,11 +41,10 @@ void Level::fromFile(std::string file_path)
       getline(inp,line);
       lines.push_back(line);
     }
-  //boost::split(lines, whole, boost::is_any_of("\n"));
-
   for(int y=0;y<lines.size();y++)
     {
       string curr = lines.at(y);
+      //part of level block?
       if(boost::iends_with(curr, "*"))
 	{ //read line
 	  for (int x=0;x<curr.size();x++)
@@ -56,6 +57,26 @@ void Level::fromFile(std::string file_path)
 		  p->pos = Position(x,y);
 		}
 	    }
+	}
+      //not part of level block
+      else if (curr.size() > 0)
+	{
+	  vector<string> words;
+	  boost::split(words, curr, boost::is_any_of("\t "));
+	  vector<string> xy;
+	  boost::split(xy, words.at(0), boost::is_any_of(","));
+	  
+	  int x = boost::lexical_cast<int>(xy.at(0));
+	  int y = boost::lexical_cast<int>(xy.at(1));
+	  string obj_name  = words.at(1);
+	  string str_param = (words.size() > 2 ? words.at(2) : "");
+	  vector<string> obj_param;
+	  boost::split(obj_param,str_param,boost::is_any_of(","));
+
+	  cerr << "(" << x << "," << y << ") : \t"
+	       << obj_name << " [" << str_param << "]\n";
+
+	  addObject(ObjFact::getInstance().build(obj_name,Position(x,y),obj_param));
 	}
     }
 }
@@ -78,20 +99,3 @@ std::list<SP<SquareObject> > Level::getPos(Position p)
       result.push_back(*it);
   return result;
 }
-
-/*
-{
-  ifstream in ( "somefile" );
-  if ( in.is_open() ) {
-    string line;
-    while ( getline ( in, line ) ) {
-      string::size_type i = line.find_first_not_of ( " \t\n\v" );
-       
-      if ( i != string::npos && line[i] == '#' )
-	continue;
-       
-      // Process non-comment line
-    }
-  }
-}
-*/

@@ -19,9 +19,9 @@ namespace fur
     Position getPosition() const {return pos;}
     bool move(Direction);
 
-    void onBump(SP<Position> from) {}
+    void onBump(Position from) {}
     void onEnter() {assert(false);}
-    void onSquareDamaged(SP<Damage>);
+    void onSquareDamaged(Damage);
 
     //own stuff
     Player(Position p):pos(p)

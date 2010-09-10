@@ -3,9 +3,12 @@
 
 #include <cassert>
 #include "squareobject.hpp"
+#include "objfact.hpp"
 
 namespace fur
 {
+  class add_wall_factory;
+
   class Wall : public SquareObject
   {
   public:
@@ -18,15 +21,16 @@ namespace fur
     Position getPosition() const {return pos;}
 
     //Events/Actions
-    void onBump(SP<Position>);
+    void onBump(Position);
     void onEnter() {assert(false);}
-    void onSquareDamaged(SP<Damage>);
+    void onSquareDamaged(Damage);
 
     Wall(Position p):pos(p)
     {}
 
   private:
     Position pos;
+    static add_wall_factory _f;
   };
 }
 

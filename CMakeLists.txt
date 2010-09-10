@@ -3,5 +3,8 @@ project (FUR)
 include_directories (libtcod-1.5.0/include)
 include_directories (include)
 link_directories (${LINK_DIRECTORIES} libtcod-1.5.0)
-add_executable (fur src/main src/squareobject src/damage src/util src/wall src/player src/level src/inputmgr src/gamemgr src/direction src/message src/inventory src/messagewindow)
+add_executable (fur src/main src/squareobject src/damage src/util src/wall
+	       	    src/player src/level src/inputmgr src/gamemgr src/direction
+		    src/message src/inventory src/messagewindow src/objfact
+		    src/door)
 target_link_libraries (fur tcodxx tcod)

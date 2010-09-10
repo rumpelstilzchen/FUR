@@ -18,9 +18,9 @@ namespace fur
     virtual Position getPosition() const = 0;
 
     //Events/Actions
-    virtual void onBump(SP<Position>) = 0;
+    virtual void onBump(Position) = 0;
     virtual void onEnter() = 0;
-    virtual void onSquareDamaged(SP<Damage>) = 0;
+    virtual void onSquareDamaged(Damage) = 0;
 
     virtual ~SquareObject(){}
   };
