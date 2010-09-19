@@ -23,6 +23,8 @@ void InputMgr::waitForInput() {
     player->move(Direction::U);
   else if (key.vk==TCODK_DOWN)
     player->move(Direction::D);
+  else if (key.vk==TCODK_CHAR && key.c=='m')
+    GameMgr::getInstance().msg("Hello, world",TCOD_BKGND_NONE,TCODColor::white);
   else if (key.vk==TCODK_ESCAPE || key.vk==TCODK_CHAR && key.c=='Q')
     GameMgr::getInstance().setGameStatus(GameMgr::QUIT);
 }

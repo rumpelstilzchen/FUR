@@ -12,11 +12,14 @@
 #include "message.hpp"
 #include "messagewindow.hpp"
 #include "runnable.hpp"
+#include "filetostrings.hpp"
 
 using namespace fur;
 
 struct GameMgr::private_state
 {
+  private_state();
+
   SP<TCODMap> fov_map;
   SP<Player> player;
   SP<Level> level;
@@ -24,8 +27,11 @@ struct GameMgr::private_state
 
   std::list<SP<Runnable> > toRun;
   int winpos_x, winpos_y;
-
-  private_state();
+  
+  typedef std::list<std::string> LOS;
+  SP<LOS> tutNames;
+  SP<LOS> tutComAtt;
+  SP<LOS> tutComHit;
 };
 
 GameMgr::private_state::private_state()
@@ -37,7 +43,27 @@ GameMgr::private_state::private_state()
     ,winpos_y(0)
 {
   level->addObject(player);
+  
+  tutNames = SP<LOS>(new LOS(FileToStrings("data/tut_names.txt")));
+  tutComAtt = SP<LOS>(new LOS(FileToStrings("data/tut_att.txt")));
+  tutComHit = SP<LOS>(new LOS(FileToStrings("data/tut_hit.txt")));
 }
+
+const std::list<std::string>& GameMgr::getTutNames()
+{
+  return *ps->tutNames;
+}
+
+const std::list<std::string>& GameMgr::getTutComAtt()
+{
+  return *ps->tutComAtt;
+}
+
+const std::list<std::string>& GameMgr::getTutComHit()
+{
+  return *ps->tutComHit;
+}
+
 
 void initializeTCOD()
 {
@@ -47,7 +73,6 @@ void initializeTCOD()
   TCODConsole::root->setBackgroundColor(TCODColor::black);
   TCODMouse::showCursor(false);
   TCODConsole::root->clear();
-
 }
 
 void GameMgr::addRunnable(SP<Runnable> r)
@@ -71,9 +96,6 @@ GameMgr::GameMgr():ps(new private_state)
 {
   cnt=0; //delete this
   initializeTCOD();
-
-  //initialize MessageWindow
-  messagewindow = new MessageWindow();
 }
 
 void GameMgr::enterGameLoop()
@@ -103,8 +125,8 @@ void GameMgr::enterGameLoop()
     ps->fov_map->computeFov(ps->player->getPosition().x,ps->player->getPosition().y);
 
     //render based on FOV
-    for (int x=0;x<winSizeX;x++)
-      for (int y=0;y<winSizeY;y++)
+    for (int x=0;x<playAreaX;x++)
+      for (int y=0;y<playAreaY;y++)
       {
         //x,y   are the positions on the screen
         //px,py are the positions on the map
@@ -131,25 +153,6 @@ void GameMgr::enterGameLoop()
           TCODConsole::root->setChar(x,y,' '); //invisible field (out of FOV)
       }
 
-    //tests of the msg method, leave it here for now
-
-    Message m;
-    if(cnt==0){
-      m=Message("null",TCOD_BKGND_NONE,TCODColor::white);
-      messagewindow->add(m);
-      msg(m);
-    }
-    if(cnt==1)msg("first line is also a very long line, should test in a better way if it handle more long lines",TCOD_BKGND_NONE,TCODColor::red);
-    if(cnt==2)msg("second",TCOD_BKGND_NONE,TCODColor::blue);
-    if(cnt==3){
-      msg("third line is really long, to be able to test wrapping features of the msgLine()",TCOD_BKGND_NONE,TCODColor::green);
-      cnt= -1;
-    }
-    msg("this is messaged every round");
-    cnt++;
-
-
-
     TCODConsole::root->flush();
 
     //process user input
@@ -172,43 +175,19 @@ GameMgr::~GameMgr()
   delete ps;
 }
 
-void GameMgr::msg(std::string m){
-   msg(m,TCOD_BKGND_NONE,TCODColor::white); //maybe change this
+void GameMgr::msg(std::string m)
+{
+  msg(m,TCOD_BKGND_NONE,TCODColor::white); //maybe change this
 }
 
-//maybe add a start set colour to the starting colour thingy
-void GameMgr::msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor colour){
-    TCODConsole::root->rect(msgAreaX,msgAreaY,msgAreaW,msgAreaH, true, TCOD_BKGND_SET); //clears the message area
-    if (currentStrings.size()>msgAreaH) currentStrings.pop_back();
-    Message m(msg,flag,colour);
-    currentStrings.push_front(m);
-    int h=msgAreaH,th;
-    std::list<Message>::iterator it; it = currentStrings.begin();
-    while (h>0&&it!=currentStrings.end()){
-       th=TCODConsole::root->getHeightLeftRect(msgAreaX,msgAreaY,msgAreaW,h,"%s",it->c_str());
-       TCODConsole::root->setForegroundColor(it->getColour());
-       TCODConsole::root->printLeftRect(msgAreaX,msgAreaY+msgAreaH-h,msgAreaW,h,it->getFlag(),"%s",it->c_str());
-       h=h-th;
-       ++it;
-    }
+void GameMgr::msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor color)
+{
+  if(msgs.size() >= msgAreaH)
+    msgs.pop_front();
+  msgs.push_back(msg);
+  TCODConsole::root->setForegroundColor(color);
+  TCODConsole::root->printLeft(msgAreaX,msgAreaY + msgs.size(),flag,msg.c_str());
 }
-
-void GameMgr::msg(Message m){
-    TCODConsole::root->rect(msgAreaX,msgAreaY,msgAreaW,msgAreaH, true, TCOD_BKGND_SET); //clears the message area
-    if (currentStrings.size()>msgAreaH) currentStrings.pop_back();
-    currentStrings.push_front(m);
-    int h=msgAreaH,th;
-    std::list<Message>::iterator it; it = currentStrings.begin();
-    while (h>0&&it!=currentStrings.end()){
-       th=TCODConsole::root->getHeightLeftRect(msgAreaX,msgAreaY,msgAreaW,h,"%s",it->c_str());
-       TCODConsole::root->setForegroundColor(it->getColour());
-       TCODConsole::root->printLeftRect(msgAreaX,msgAreaY+msgAreaH-h,msgAreaW,h,it->getFlag(),"%s",it->c_str());
-       h=h-th;
-       ++it;
-    }
-}
-
-
 
 GameMgr& GameMgr::getInstance()
 {

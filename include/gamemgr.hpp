@@ -27,11 +27,13 @@ namespace fur
     struct private_state;
     private_state* ps;
 
-    std::list<Message > currentStrings; //currentStrings
-    MessageWindow * messagewindow;
+    std::list<Message> msgs;
 
     int cnt; //delete this
 
+    const std::list<std::string>& getTutNames();
+    const std::list<std::string>& getTutComAtt();
+    const std::list<std::string>& getTutComHit();
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};
 
