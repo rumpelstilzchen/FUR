@@ -18,6 +18,7 @@ void Enemy::onSquareDamaged(Damage d)
 
 void Enemy::playerSeenAt(Position p)
 {
+  assert(pos!=p);
   if(state==INNOCENT)
     state = PLAYER_SEEN;
   lastPlPos = p;
