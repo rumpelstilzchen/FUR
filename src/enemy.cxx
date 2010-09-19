@@ -27,6 +27,7 @@ void Enemy::playerSeenAt(Position p)
 Enemy::Enemy(Position p):pos(p),state(INNOCENT),lastPlPos(Position(0,0))
 {
   GameMgr::getInstance().addRunnable(SP<Runnable>(this));
+  
 }
 
 void Enemy::run()
@@ -44,7 +45,16 @@ void Enemy::run()
 void Enemy::move(Position np)
 {
   if(!GameMgr::getInstance().getLevel()->isPassable(np))
-    return;
+    {
+      SP<Player> player = GameMgr::getInstance().getLevel()->getTypeAt<Player>(np);
+      if(!player)
+	return;
+      else
+	{
+	  GameMgr::getInstance().msg(name+": Haha, got ya!");
+	  player->onSquareDamaged(Damage(1));
+	}
+    }
   pos = np;
 }
 

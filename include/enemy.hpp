@@ -39,6 +39,7 @@ namespace fur
   private:
     Position pos;
     STATE state;
+    std::string name;
     Position lastPlPos;
     static add_enemy_factory _f;
   };

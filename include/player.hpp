@@ -24,7 +24,7 @@ namespace fur
     void onSquareDamaged(Damage);
 
     //own stuff
-    Player(Position p):pos(p)
+    Player(Position p):pos(p),hitpoints(10)
     {}
 
     friend class InputMgr;

@@ -34,6 +34,9 @@ namespace fur
     const std::list<std::string>& getTutNames();
     const std::list<std::string>& getTutComAtt();
     const std::list<std::string>& getTutComHit();
+    std::string rndName();
+    std::string rndAtt();
+    std::string rndHit();
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};
 

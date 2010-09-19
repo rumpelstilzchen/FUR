@@ -1,6 +1,10 @@
 #include <list>
 #include <algorithm>
+#include <ctime>
 #include <boost/foreach.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/variate_generator.hpp>
 #include "constants.hpp"
 #include "gamemgr.hpp"
 #include "libtcod.hpp"
@@ -15,6 +19,8 @@
 #include "filetostrings.hpp"
 
 using namespace fur;
+
+boost::mt19937 gen;
 
 struct GameMgr::private_state
 {
@@ -34,6 +40,15 @@ struct GameMgr::private_state
   SP<LOS> tutComHit;
 };
 
+std::string slist_nth(std::list<std::string> lst,int n)
+{
+  typedef std::list<std::string>::iterator Iter;
+  for(Iter it=lst.begin();it!=lst.end();it++,--n)
+    if(n==0)
+      return *it;
+  assert(false);
+}
+
 GameMgr::private_state::private_state()
     :fov_map(SP<TCODMap>(new TCODMap (mapSizeX,mapSizeY)))
     ,player(SP<Player>(new Player(Position(1,1))))
@@ -47,6 +62,27 @@ GameMgr::private_state::private_state()
   tutNames = SP<LOS>(new LOS(FileToStrings("data/tut_names.txt")));
   tutComAtt = SP<LOS>(new LOS(FileToStrings("data/tut_att.txt")));
   tutComHit = SP<LOS>(new LOS(FileToStrings("data/tut_hit.txt")));
+}
+
+std::string GameMgr::rndName()
+{
+  boost::uniform_int<> dist(1,getTutNames().size());
+  boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
+  return slist_nth(getTutNames(),die());  
+}
+
+std::string GameMgr::rndAtt()
+{
+  boost::uniform_int<> dist(1,getTutNames().size());
+  boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
+  return slist_nth(getTutComAtt(),die());  
+}
+
+std::string GameMgr::rndHit()
+{
+  boost::uniform_int<> dist(1,getTutNames().size());
+  boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
+  return slist_nth(getTutComHit(),die());  
 }
 
 const std::list<std::string>& GameMgr::getTutNames()
@@ -63,7 +99,6 @@ const std::list<std::string>& GameMgr::getTutComHit()
 {
   return *ps->tutComHit;
 }
-
 
 void initializeTCOD()
 {

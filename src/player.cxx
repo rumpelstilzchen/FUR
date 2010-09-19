@@ -9,10 +9,8 @@ using namespace fur;
 
 void Player::onSquareDamaged(Damage dmg)
 {
-  if (dmg.type == Damage::HP_ONLY)
-    {
-      hitpoints-=dmg.hp_damage;
-    }
+  hitpoints-=dmg.hp_damage;
+  
 }
 
 void Player::move(Direction d)

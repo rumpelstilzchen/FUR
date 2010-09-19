@@ -6,9 +6,8 @@ namespace fur
   class Damage
   {
   public:
+    Damage(int dmg):hp_damage(dmg) {}
     int hp_damage;
-    enum {HP_ONLY,MOTIVATION_ONLY} type;
-
   };
 }
 
