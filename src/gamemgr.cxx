@@ -132,22 +132,22 @@ void GameMgr::enterGameLoop()
       }
 
     //tests of the msg method, leave it here for now
-    /*
+
     Message m;
     if(cnt==0){
-        m=Message("null",TCOD_BKGND_NONE,TCODColor::white);
-        messagewindow->add(m);
-        msg(m);
+      m=Message("null",TCOD_BKGND_NONE,TCODColor::white);
+      messagewindow->add(m);
+      msg(m);
     }
     if(cnt==1)msg("first line is also a very long line, should test in a better way if it handle more long lines",TCOD_BKGND_NONE,TCODColor::red);
     if(cnt==2)msg("second",TCOD_BKGND_NONE,TCODColor::blue);
     if(cnt==3){
-        msg("third line is really long, to be able to test wrapping features of the msgLine()",TCOD_BKGND_NONE,TCODColor::green);
-        cnt= -1;
+      msg("third line is really long, to be able to test wrapping features of the msgLine()",TCOD_BKGND_NONE,TCODColor::green);
+      cnt= -1;
     }
     msg("this is messaged every round");
     cnt++;
-    */
+
 
 
     TCODConsole::root->flush();
