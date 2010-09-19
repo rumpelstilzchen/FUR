@@ -31,14 +31,22 @@ public :
     //make sure we're not asked for a path geater than one step
     assert((xFrom-xTo)*(xFrom-xTo) <= 1);
     assert((yFrom-yTo)*(yFrom-yTo) <= 1);
-    
+
     //check if destination is walkable, if so, cost is always 1.0f
+    //note the routine requires the end-field of the journey to be walkable,
+    //even if it isn't in our game logic (player is there e.g.),
+    //so double check if the next step is walkable, before moving there!
+    if(Position(xTo,yTo)==to || Position(xTo,yTo)==from)
+      return 1.0f;
     SP<Level> lvl = GameMgr::getInstance().getLevel();
     if(lvl->isPassable(Position(xTo,yTo)))
       return 1.0f;
     else
       return 0.0f;
   }
+
+  PathCostCallback(Position from, Position to):from(from),to(to) {}
+  Position from,to;
 };
 
 Position Level::getSize() const
@@ -61,7 +69,10 @@ StepResult Level::nextStepTo(Position origin, Position dest) const
   //don't move to where we are already!
   assert(origin.x-dest.x != 0 || origin.y-dest.y != 0);
   SP<TCODPath> path =
-    SP<TCODPath>(new TCODPath(getSize().x,getSize().y,new PathCostCallback(),NULL));
+    SP<TCODPath>(new TCODPath(getSize().x,
+			      getSize().y,
+			      new PathCostCallback(origin,dest),
+			      NULL));
   
   if (!path->compute(origin.x,origin.y,dest.x,dest.y))
     return stuck; //no path available

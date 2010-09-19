@@ -25,6 +25,4 @@ void InputMgr::waitForInput() {
     player->move(Direction::D);
   else if (key.vk==TCODK_ESCAPE || key.vk==TCODK_CHAR && key.c=='Q')
     GameMgr::getInstance().setGameStatus(GameMgr::QUIT);
-  else if (key.vk==TCODK_CHAR && key.c=='a')
-    assert(false);
 }

@@ -43,7 +43,8 @@ void Enemy::run()
 
 void Enemy::move(Position np)
 {
-  assert(GameMgr::getInstance().getLevel()->isPassable(np));
+  if(!GameMgr::getInstance().getLevel()->isPassable(np))
+    return;
   pos = np;
 }
 
