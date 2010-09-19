@@ -17,7 +17,7 @@ namespace fur
     bool blocksLight() const {return false;}
     char getChar() const {return '@';}
     Position getPosition() const {return pos;}
-    bool move(Direction);
+    void move(Direction);
 
     void onBump(Position from) {}
     void onEnter() {assert(false);}

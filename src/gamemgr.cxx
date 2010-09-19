@@ -1,14 +1,17 @@
 #include <list>
 #include <algorithm>
+#include <boost/foreach.hpp>
 #include "constants.hpp"
 #include "gamemgr.hpp"
 #include "libtcod.hpp"
 #include "squareobject.hpp"
 #include "player.hpp"
 #include "level.hpp"
+#include "enemy.hpp"
 #include "inputmgr.hpp"
 #include "message.hpp"
 #include "messagewindow.hpp"
+#include "runnable.hpp"
 
 using namespace fur;
 
@@ -19,18 +22,19 @@ struct GameMgr::private_state
   SP<Level> level;
   GAME_STATUS game_status;
 
+  std::list<SP<Runnable> > toRun;
   int winpos_x, winpos_y;
 
   private_state();
 };
 
 GameMgr::private_state::private_state()
-    :fov_map(SP<TCODMap>(new TCODMap (mapSizeX,mapSizeY))),
-    player(SP<Player>(new Player(Position(1,1)))),
-    level(SP<Level>(new Level)),
-    game_status(RUNNING),
-    winpos_x(0),
-    winpos_y(0)
+    :fov_map(SP<TCODMap>(new TCODMap (mapSizeX,mapSizeY)))
+    ,player(SP<Player>(new Player(Position(1,1))))
+    ,level(SP<Level>(new Level))
+    ,game_status(RUNNING)
+    ,winpos_x(0)
+    ,winpos_y(0)
 {
   level->addObject(player);
 }
@@ -46,6 +50,18 @@ void initializeTCOD()
 
 }
 
+void GameMgr::addRunnable(SP<Runnable> r)
+{
+  assert(0 == count(ps->toRun.begin(),ps->toRun.end(),r));
+  ps->toRun.push_back(r);
+}
+
+void GameMgr::remRunnable(SP<Runnable> r)
+{
+  assert(1 == count(ps->toRun.begin(),ps->toRun.end(),r));
+  ps->toRun.remove(r);
+}
+
 void GameMgr::setGameStatus(GAME_STATUS status)
 {
   ps->game_status = status;
@@ -58,7 +74,6 @@ GameMgr::GameMgr():ps(new private_state)
 
   //initialize MessageWindow
   messagewindow = new MessageWindow();
-
 }
 
 void GameMgr::enterGameLoop()
@@ -66,6 +81,12 @@ void GameMgr::enterGameLoop()
   // MAIN GAME LOOP
   while (ps->game_status == RUNNING && !TCODConsole::isWindowClosed())
   {
+    //run Runnable object's run() fkt (e.g. for AI)
+    BOOST_FOREACH(SP<Runnable> r,ps->toRun)
+      {
+	r->run();
+      }
+
     //build FOV MAP
     for (int i=0;i<playAreaX;i++)
       for (int j=0;j<playAreaY;j++)
@@ -96,7 +117,13 @@ void GameMgr::enterGameLoop()
           {
             SP<SquareObject> sq = sql.front();
             TCODConsole::root->setChar(x,y,sq->getChar());
-          }
+
+	    //are there enemys seen? if so, they see you too... ;-) 
+	    SP<Enemy> enemy = ps->level->getTypeAt<Enemy>(Position(px,py));
+	    if(enemy)
+	      enemy->playerSeenAt(Position(ps->player->getPosition().x
+					   ,ps->player->getPosition().y));
+	  }
           else
             TCODConsole::root->setChar(x,y,'.');
         }

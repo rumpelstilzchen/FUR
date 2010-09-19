@@ -10,6 +10,7 @@
 #include "libtcod.hpp"
 #include "libtcod_int.h"
 #include "messagewindow.hpp"
+#include "runnable.hpp"
 
 namespace fur
 {
@@ -38,6 +39,8 @@ namespace fur
     SP<Level> getLevel() const;
 
     void setGameStatus(GAME_STATUS);
+    void addRunnable(SP<Runnable>);
+    void remRunnable(SP<Runnable>);
 
     void enterGameLoop();
 

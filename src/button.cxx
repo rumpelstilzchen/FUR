@@ -1,31 +1,60 @@
-#include "wall.hpp"
+#include <boost/lexical_cast.hpp>
+#include "button.hpp"
+#include "gamemgr.hpp"
 
 using namespace fur;
 
-void Wall::onBump(SP<Position> from)
+void Button::onBump(Position from)
 {
-  //here could be a terminal msg, if the player bumps into a wall
+  if(assoc_door->isClosed)
+    {
+     if(mode==SWITCH || mode==OPEN)
+       assoc_door->isClosed = false;
+    }
+  else if(mode==SWITCH || mode==CLOSE)
+    assoc_door->isClosed = true;
 }
 
-void Wall::onSquareDamaged(SP<Damage> dmg)
+void Button::onSquareDamaged(Damage dmg)
 {
-  //walls ignore damage for now
+  //buttons ignore damage for now
+}
+
+Button::Button(Position p, OP_MODE m, Position d):pos(p),mode(m)
+{
+  assoc_door = GameMgr::getInstance().getLevel()->getTypeAt<Door>(d,true);
 }
 
 namespace fur {
-  struct wall_factory : Fkt {
-    SP<SquareObject> f(Position pos, std::vector<std::string> param) {
-      return SP<SquareObject>(new Wall(pos));
-    }
-  };
-
-  struct add_wall_factory
-  {
-    add_wall_factory()
+  struct button_factory : Fkt {
+    SP<SquareObject> f(Position pos, std::vector<std::string> param)
     {
-      ObjFact::getInstance().addSQType("Wall",SP<Fkt>(new wall_factory()));
+      Button::OP_MODE m;
+      if(param.at(0) == "open")
+	m=Button::OPEN;
+      else if (param.at(0) == "close")
+	m=Button::CLOSE;
+      else if (param.at(0) == "switch")
+	m=Button::SWITCH;
+      else
+	assert(false);
+
+      int x = boost::lexical_cast<int>(param.at(1));
+      int y = boost::lexical_cast<int>(param.at(2));
+
+      Position d(x,y);
+
+      return SP<SquareObject>(new Button(pos,m,d));
     }
   };
 
-  add_wall_factory Wall::_f = add_wall_factory();
+  struct add_button_factory
+  {
+    add_button_factory()
+    {
+      ObjFact::getInstance().addSQType("Button",SP<Fkt>(new button_factory()));
+    }
+  };
+
+  add_button_factory Button::_f = add_button_factory();
 }

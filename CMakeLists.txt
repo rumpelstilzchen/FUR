@@ -6,5 +6,5 @@ link_directories (${LINK_DIRECTORIES} libtcod-1.5.0)
 add_executable (fur src/main src/squareobject src/damage src/util src/wall
 	       	    src/player src/level src/inputmgr src/gamemgr src/direction
 		    src/message src/inventory src/messagewindow src/objfact
-		    src/door)
+		    src/door src/button src/enemy)
 target_link_libraries (fur tcodxx tcod)

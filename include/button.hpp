@@ -1,15 +1,16 @@
-#ifndef __WALL_HPP
-#define __WALL_HPP
+#ifndef __BUTTON_HPP
+#define __BUTTON_HPP
 
 #include <cassert>
 #include "squareobject.hpp"
 #include "objfact.hpp"
+#include "door.hpp"
 
 namespace fur
 {
-  class add_wall_factory;
+  class add_button_factory;
 
-  class Wall : public SquareObject
+  class Button : public SquareObject
   {
   public:
     // inheritance
@@ -17,21 +18,24 @@ namespace fur
     bool isPassable() const {return false;}
     int getLightIntensity() const {return 0;}
     bool blocksLight() const {return true;}
-    char getChar() const {return '#';}
+    char getChar() const {return 'b';}
     Position getPosition() const {return pos;}
 
     //Events/Actions
-    void onBump(SP<Position>);
+    void onBump(Position);
     void onEnter() {assert(false);}
-    void onSquareDamaged(SP<Damage>);
+    void onSquareDamaged(Damage);
 
-    Wall(Position p):pos(p)
-    {}
+    enum OP_MODE {OPEN,CLOSE,SWITCH};
+
+    Button(Position p, OP_MODE m, Position d);
 
   private:
     Position pos;
-    static add_wall_factory _f;
+    OP_MODE mode;
+    SP<Door> assoc_door;
+    static add_button_factory _f;
   };
 }
 
-#endif //__WALL_HPP
+#endif //__BUTTON_HPP

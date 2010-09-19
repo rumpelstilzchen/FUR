@@ -1,5 +1,4 @@
 #include "door.hpp"
-#include <iostream>
 
 using namespace fur;
 
@@ -11,7 +10,6 @@ void Door::onBump(Position from)
 
 void Door::onEnter()
 {
-  std::cerr << "a door has been entered" << std::endl;
 }
 
 void Door::onSquareDamaged(Damage dmg)
