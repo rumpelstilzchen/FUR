@@ -27,7 +27,7 @@ void Enemy::playerSeenAt(Position p)
 Enemy::Enemy(Position p):pos(p),state(INNOCENT),lastPlPos(Position(0,0))
 {
   GameMgr::getInstance().addRunnable(SP<Runnable>(this));
-  
+  name = GameMgr::getInstance().rndName();
 }
 
 void Enemy::run()
@@ -51,11 +51,12 @@ void Enemy::move(Position np)
 	return;
       else
 	{
-	  GameMgr::getInstance().msg(name+": Haha, got ya!");
+	  GameMgr::getInstance().msg(name+": "+GameMgr::getInstance().rndAtt());
 	  player->onSquareDamaged(Damage(1));
 	}
     }
-  pos = np;
+  else
+    pos = np;
 }
 
 namespace fur

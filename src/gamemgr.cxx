@@ -20,7 +20,7 @@
 
 using namespace fur;
 
-boost::mt19937 gen;
+boost::mt19937 gen(time(0));
 
 struct GameMgr::private_state
 {
@@ -37,11 +37,11 @@ struct GameMgr::private_state
   typedef std::list<std::string> LOS;
   SP<LOS> tutNames;
   SP<LOS> tutComAtt;
-  SP<LOS> tutComHit;
 };
 
 std::string slist_nth(std::list<std::string> lst,int n)
 {
+  std::cout << "nth: " << n << std::endl;
   typedef std::list<std::string>::iterator Iter;
   for(Iter it=lst.begin();it!=lst.end();it++,--n)
     if(n==0)
@@ -61,28 +61,20 @@ GameMgr::private_state::private_state()
   
   tutNames = SP<LOS>(new LOS(FileToStrings("data/tut_names.txt")));
   tutComAtt = SP<LOS>(new LOS(FileToStrings("data/tut_att.txt")));
-  tutComHit = SP<LOS>(new LOS(FileToStrings("data/tut_hit.txt")));
 }
 
 std::string GameMgr::rndName()
 {
   boost::uniform_int<> dist(1,getTutNames().size());
   boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
-  return slist_nth(getTutNames(),die());  
+  return slist_nth(getTutNames(),die()-1);  
 }
 
 std::string GameMgr::rndAtt()
 {
   boost::uniform_int<> dist(1,getTutNames().size());
   boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
-  return slist_nth(getTutComAtt(),die());  
-}
-
-std::string GameMgr::rndHit()
-{
-  boost::uniform_int<> dist(1,getTutNames().size());
-  boost::variate_generator<boost::mt19937&, boost::uniform_int<> > die(gen, dist);
-  return slist_nth(getTutComHit(),die());  
+  return slist_nth(getTutComAtt(),die()-1);  
 }
 
 const std::list<std::string>& GameMgr::getTutNames()
@@ -93,11 +85,6 @@ const std::list<std::string>& GameMgr::getTutNames()
 const std::list<std::string>& GameMgr::getTutComAtt()
 {
   return *ps->tutComAtt;
-}
-
-const std::list<std::string>& GameMgr::getTutComHit()
-{
-  return *ps->tutComHit;
 }
 
 void initializeTCOD()
@@ -193,6 +180,38 @@ void GameMgr::enterGameLoop()
     //process user input
     InputMgr::getInstance().waitForInput();
   }
+
+  if(ps->game_status == WON)
+    {
+      TCODConsole::root->clear();
+      TCODConsole::root->setForegroundColor(TCODColor::yellow);
+      TCODConsole::root->printLeft(40,40,TCOD_BKGND_NONE,"SIE HABEN GEWONNEN!");
+      TCODConsole::root->setForegroundColor(TCODColor::white);
+      TCODConsole::root->printLeft(40,45,TCOD_BKGND_NONE,"(Tastendruck zum beenden)");
+      MSG("Die Musterloesung ist geborgen.");
+      MSG("Jetzt steht ihrem Abschluss...");
+      MSG("nichts mehr im Wege! :-)");
+      TCODConsole::root->flush();
+    }
+  else if(ps->game_status == LOST)
+    {
+      TCODConsole::root->clear();
+      TCODConsole::root->setForegroundColor(TCODColor::yellow);
+      TCODConsole::root->printLeft(40,40,TCOD_BKGND_NONE,"SIE HABEN VERLOREN!");
+      TCODConsole::root->setForegroundColor(TCODColor::white);
+      TCODConsole::root->printLeft(40,45,TCOD_BKGND_NONE,"(Tastendruck zum beenden)");
+      MSG("Ausserhalb der Oeffnungszeiten des...");
+      MSG("Info-Traktes wurden sie im Gebaeude gefasst!");
+      MSG("Der Traum der Musterloesung ist ausgetraeumt.");
+      MSG(":-(");
+      MSG("");
+      MSG("Aber morgen Nacht koennen sie es...");
+      MSG("ja noch einmal versuchen...");
+      TCODConsole::root->flush();
+    }
+  else
+    assert(false);
+  TCODConsole::waitForKeypress(true);
 }
 
 SP<Player> GameMgr::getPlayer() const
@@ -222,6 +241,7 @@ void GameMgr::msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor color)
   msgs.push_back(msg);
   TCODConsole::root->setForegroundColor(color);
   TCODConsole::root->printLeft(msgAreaX,msgAreaY + msgs.size(),flag,msg.c_str());
+  TCODConsole::root->flush();
 }
 
 GameMgr& GameMgr::getInstance()

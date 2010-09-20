@@ -31,12 +31,6 @@ namespace fur
 
     int cnt; //delete this
 
-    const std::list<std::string>& getTutNames();
-    const std::list<std::string>& getTutComAtt();
-    const std::list<std::string>& getTutComHit();
-    std::string rndName();
-    std::string rndAtt();
-    std::string rndHit();
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};
 
@@ -48,6 +42,11 @@ namespace fur
     void remRunnable(SP<Runnable>);
 
     void enterGameLoop();
+
+    const std::list<std::string>& getTutNames();
+    const std::list<std::string>& getTutComAtt();
+    std::string rndName();
+    std::string rndAtt();
 
     void msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor colour);                      //prints to standard Area.
     void msg(std::string msg); //writes with current background colour

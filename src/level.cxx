@@ -15,6 +15,7 @@
 #include "enemy.hpp"
 #include "objfact.hpp"
 #include "libtcod.hpp"
+#include "solution.hpp"
 
 using namespace fur;
 
@@ -32,13 +33,21 @@ public :
     assert((xFrom-xTo)*(xFrom-xTo) <= 1);
     assert((yFrom-yTo)*(yFrom-yTo) <= 1);
 
+    SP<Level> lvl = GameMgr::getInstance().getLevel();
+
+    bool isDiagonal = (xFrom-xTo != 0 && yFrom-yTo != 0);
+    if(isDiagonal)
+      if(!lvl->isPassable(Position(xTo,yFrom)) ||
+	 !lvl->isPassable(Position(xFrom,yTo)))
+	return 0.0f;
+
+
     //check if destination is walkable, if so, cost is always 1.0f
     //note the routine requires the end-field of the journey to be walkable,
     //even if it isn't in our game logic (player is there e.g.),
     //so double check if the next step is walkable, before moving there!
     if(Position(xTo,yTo)==to || Position(xTo,yTo)==from)
       return 1.0f;
-    SP<Level> lvl = GameMgr::getInstance().getLevel();
     if(lvl->isPassable(Position(xTo,yTo)))
       return 1.0f;
     else
@@ -128,6 +137,8 @@ void Level::fromFile(std::string file_path)
 		addObject(SP<SquareObject>(new Wall(Position(x,y))));
 	      else if(curr.at(x) == 'T')
 		addObject(SP<SquareObject>(new Enemy(Position(x,y))));
+	      else if(curr.at(x) == '%')
+		addObject(SP<SquareObject>(new Solution(Position(x,y))));
 	      else if(curr.at(x) == '@')
 		{
 		  SP<Player> p = GameMgr::getInstance().getPlayer();

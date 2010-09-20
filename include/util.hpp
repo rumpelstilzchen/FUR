@@ -6,6 +6,8 @@
 
 #define SP boost::shared_ptr
 
+#define MSG GameMgr::getInstance().msg
+
 namespace fur
 {
   struct pred_not

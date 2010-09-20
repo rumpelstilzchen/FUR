@@ -8,7 +8,7 @@ int main()
 {
   GameMgr& gmgr = GameMgr::getInstance();
   
-  gmgr.getLevel()->fromFile("data/level_test.asc");
+  gmgr.getLevel()->fromFile("data/t9.asc");
 
   gmgr.enterGameLoop();
 

@@ -9,8 +9,8 @@ using namespace fur;
 
 void Player::onSquareDamaged(Damage dmg)
 {
-  hitpoints-=dmg.hp_damage;
-  
+  MSG("Sie wurden erwischt, verloren..");
+  GameMgr::getInstance().setGameStatus(GameMgr::LOST);
 }
 
 void Player::move(Direction d)
@@ -32,7 +32,6 @@ void Player::move(Direction d)
 	{
 	  so->onEnter();
 	}
-      
       pos = newPos;
     }
 }

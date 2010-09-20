@@ -9,10 +9,16 @@ void Button::onBump(Position from)
   if(assoc_door->isClosed)
     {
      if(mode==SWITCH || mode==OPEN)
-       assoc_door->isClosed = false;
+       {
+	 assoc_door->isClosed = false;
+	 MSG("Der Knopf hat eine Tuer geoeffnet.");
+       }
     }
   else if(mode==SWITCH || mode==CLOSE)
-    assoc_door->isClosed = true;
+    {
+      assoc_door->isClosed = true;
+      MSG("Der Knopf hat eine Tuer geschlossen.");
+    }
 }
 
 void Button::onSquareDamaged(Damage dmg)

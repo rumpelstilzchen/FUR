@@ -12,6 +12,8 @@ std::list<std::string> FileToStrings(std::string filename)
     {
       string line;
       getline(inp,line);
+      if(line.compare("")==0)
+	continue;
       lines.push_back(line);
     }
   return lines;

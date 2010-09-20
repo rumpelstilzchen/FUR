@@ -1,11 +1,15 @@
 #include "door.hpp"
+#include "gamemgr.hpp"
 
 using namespace fur;
 
 void Door::onBump(Position from)
 {
-  if(!isLocked)
-    isClosed = false;
+  if(!isLocked && isClosed)
+    {
+      MSG("@: Ich habe eine tuer geoeffnet.");
+      isClosed = false;
+    }
 }
 
 void Door::onEnter()
