@@ -120,20 +120,11 @@ GameMgr::GameMgr():ps(new private_state)
   initializeTCOD();
 }
 
-void GameMgr::enterGameLoop()
+void GameMgr::render()
 {
-  // MAIN GAME LOOP
-  while (ps->game_status == RUNNING && !TCODConsole::isWindowClosed())
-  {
-    //run Runnable object's run() fkt (e.g. for AI)
-    BOOST_FOREACH(SP<Runnable> r,ps->toRun)
-      {
-	r->run();
-      }
-
-    //build FOV MAP
-    for (int i=0;i<playAreaX;i++)
-      for (int j=0;j<playAreaY;j++)
+  //build FOV MAP
+  for (int i=0;i<playAreaX;i++)
+    for (int j=0;j<playAreaY;j++)
       {
         std::list<SP<SquareObject> > sql = ps->level->getPos(Position(i,j));
         int light_blockers = std::count_if(sql.begin(),sql.end(),pred_blocks_light());
@@ -143,42 +134,56 @@ void GameMgr::enterGameLoop()
           ps->fov_map->setProperties(i,j,true,true);
       }
 
-    //compute FOV around player
-    ps->fov_map->computeFov(ps->player->getPosition().x,ps->player->getPosition().y);
+  //compute FOV around player
+  ps->fov_map->computeFov(ps->player->getPosition().x,ps->player->getPosition().y);
 
-    //render based on FOV
-    for (int x=0;x<playAreaX;x++)
-      for (int y=0;y<playAreaY;y++)
+  //render based on FOV
+  for (int x=0;x<playAreaX;x++)
+    for (int y=0;y<playAreaY;y++)
       {
         //x,y   are the positions on the screen
         //px,py are the positions on the map
         int px = ps->winpos_x+x;
         int py = ps->winpos_y+y;
         if (ps->fov_map->isInFov(px,py))
-        {
-          std::list<SP<SquareObject> > sql = ps->level->getPos(Position(px,py));
-          if (sql.size()>0)
-          {
-            SP<SquareObject> sq = sql.front();
-            TCODConsole::root->setChar(x,y,sq->getChar());
+	  {
+	    std::list<SP<SquareObject> > sql = ps->level->getPos(Position(px,py));
+	    if (sql.size()>0)
+	      {
+		SP<SquareObject> sq = sql.front();
+		TCODConsole::root->setChar(x,y,sq->getChar());
 
-	    //are there enemys seen? if so, they see you too... ;-) 
-	    SP<Enemy> enemy = ps->level->getTypeAt<Enemy>(Position(px,py));
-	    if(enemy)
-	      enemy->playerSeenAt(Position(ps->player->getPosition().x
-					   ,ps->player->getPosition().y));
+		//are there enemys seen? if so, they see you too... ;-) 
+		SP<Enemy> enemy = ps->level->getTypeAt<Enemy>(Position(px,py));
+		if(enemy)
+		  enemy->playerSeenAt(Position(ps->player->getPosition().x
+					       ,ps->player->getPosition().y));
+	      }
+	    else
+	      TCODConsole::root->setChar(x,y,'.');
 	  }
-          else
-            TCODConsole::root->setChar(x,y,'.');
-        }
         else
           TCODConsole::root->setChar(x,y,' '); //invisible field (out of FOV)
       }
+}
 
+void GameMgr::enterGameLoop()
+{
+  // MAIN GAME LOOP
+  while (ps->game_status == RUNNING && !TCODConsole::isWindowClosed())
+  {
+    render();
     TCODConsole::root->flush();
 
     //process user input
     InputMgr::getInstance().waitForInput();
+
+    render(); //for AI
+    //run Runnable object's run() fkt (e.g. for AI)
+    BOOST_FOREACH(SP<Runnable> r,ps->toRun)
+      {
+	r->run();
+      }
   }
 
   if(ps->game_status == WON)

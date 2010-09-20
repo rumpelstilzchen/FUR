@@ -41,6 +41,7 @@ namespace fur
     void addRunnable(SP<Runnable>);
     void remRunnable(SP<Runnable>);
 
+    void render();
     void enterGameLoop();
 
     const std::list<std::string>& getTutNames();
