@@ -23,7 +23,7 @@ namespace fur
 
     //private state
     struct private_state;
-    private_state* ps;
+    SP<private_state> ps;
 
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};

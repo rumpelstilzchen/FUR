@@ -38,16 +38,6 @@ struct GameMgr::private_state
   SP<LOS> tutComAtt;
 };
 
-std::string slist_nth(std::list<std::string> lst,int n)
-{
-  std::cout << "nth: " << n << std::endl;
-  typedef std::list<std::string>::iterator Iter;
-  for(Iter it=lst.begin();it!=lst.end();it++,--n)
-    if(n==0)
-      return *it;
-  assert(false);
-}
-
 GameMgr::private_state::private_state()
     :fov_map(SP<TCODMap>(new TCODMap (mapSizeX,mapSizeY)))
     ,player(SP<Player>(new Player(Position(1,1))))
@@ -60,6 +50,16 @@ GameMgr::private_state::private_state()
   
   tutNames = SP<LOS>(new LOS(FileToStrings("data/tut_names.txt")));
   tutComAtt = SP<LOS>(new LOS(FileToStrings("data/tut_att.txt")));
+}
+
+std::string slist_nth(std::list<std::string> lst,int n)
+{
+  std::cout << "nth: " << n << std::endl;
+  typedef std::list<std::string>::iterator Iter;
+  for(Iter it=lst.begin();it!=lst.end();it++,--n)
+    if(n==0)
+      return *it;
+  assert(false);
 }
 
 std::string GameMgr::rndName()
@@ -113,7 +113,7 @@ void GameMgr::setGameStatus(GAME_STATUS status)
   ps->game_status = status;
 }
 
-GameMgr::GameMgr():ps(new private_state)
+GameMgr::GameMgr():ps(new private_state())
 {
   initializeTCOD();
 }
@@ -229,7 +229,6 @@ SP<Level> GameMgr::getLevel() const
 
 GameMgr::~GameMgr()
 {
-  delete ps;
 }
 
 void GameMgr::msg(std::string m)

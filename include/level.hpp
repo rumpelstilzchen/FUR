@@ -36,7 +36,7 @@ namespace fur
   private:
     //we completely hide the private state to reduce unneccesary dependencies
     struct private_state;
-    private_state* ps;
+    SP<private_state> ps;
   };
 }
 

@@ -109,7 +109,6 @@ Level::Level():ps(new Level::private_state)
 
 Level::~Level()
 {
-  delete ps;
 }
 
 void Level::fromFile(std::string file_path)
