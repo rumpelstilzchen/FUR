@@ -6,10 +6,8 @@
 #include "util.hpp"
 #include "player.hpp"
 #include "level.hpp"
-#include "message.hpp"
 #include "libtcod.hpp"
 #include "libtcod_int.h"
-#include "messagewindow.hpp"
 #include "runnable.hpp"
 
 namespace fur
@@ -26,10 +24,6 @@ namespace fur
     //private state
     struct private_state;
     private_state* ps;
-
-    std::list<Message> msgs;
-
-    int cnt; //delete this
 
   public:
     enum GAME_STATUS {RUNNING,QUIT,WON,LOST};
@@ -51,7 +45,6 @@ namespace fur
 
     void msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor colour);                      //prints to standard Area.
     void msg(std::string msg); //writes with current background colour
-    void msg(Message m);
 
     //singleton foo
     static GameMgr &getInstance();

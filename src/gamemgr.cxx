@@ -13,8 +13,6 @@
 #include "level.hpp"
 #include "enemy.hpp"
 #include "inputmgr.hpp"
-#include "message.hpp"
-#include "messagewindow.hpp"
 #include "runnable.hpp"
 #include "filetostrings.hpp"
 
@@ -30,6 +28,7 @@ struct GameMgr::private_state
   SP<Player> player;
   SP<Level> level;
   GAME_STATUS game_status;
+  std::list<std::string> msgs;
 
   std::list<SP<Runnable> > toRun;
   int winpos_x, winpos_y;
@@ -116,7 +115,6 @@ void GameMgr::setGameStatus(GAME_STATUS status)
 
 GameMgr::GameMgr():ps(new private_state)
 {
-  cnt=0; //delete this
   initializeTCOD();
 }
 
@@ -241,11 +239,11 @@ void GameMgr::msg(std::string m)
 
 void GameMgr::msg(std::string msg,TCOD_bkgnd_flag_t flag,const TCODColor color)
 {
-  if(msgs.size() >= msgAreaH)
-    msgs.pop_front();
-  msgs.push_back(msg);
+  if(ps->msgs.size() >= msgAreaH)
+    ps->msgs.pop_front();
+  ps->msgs.push_back(msg);
   TCODConsole::root->setForegroundColor(color);
-  TCODConsole::root->printLeft(msgAreaX,msgAreaY + msgs.size(),flag,msg.c_str());
+  TCODConsole::root->printLeft(msgAreaX,msgAreaY + ps->msgs.size(),flag,msg.c_str());
   TCODConsole::root->flush();
 }
 
