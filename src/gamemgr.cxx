@@ -110,7 +110,8 @@ void GameMgr::remRunnable(SP<Runnable> r)
 
 void GameMgr::setGameStatus(GAME_STATUS status)
 {
-  ps->game_status = status;
+  if(ps->game_status == RUNNING)
+    ps->game_status = status;
 }
 
 GameMgr::GameMgr():ps(new private_state())
@@ -183,6 +184,8 @@ void GameMgr::enterGameLoop()
 	r->run();
       }
   }
+
+  TCODConsole::waitForKeypress(true);  
 
   if(ps->game_status == WON)
     {
